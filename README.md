@@ -111,6 +111,3 @@ Issues and pull requests are welcome. Ideas for future features:
 - Multi-user accounts and permissions
 - Log retention/cleanup policy
 
-## License
-
-MIT — see [LICENSE](LICENSE).
