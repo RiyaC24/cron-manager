@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Status</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+  :root {
+    --bg: #16180f; --panel: #1f2216; --border: #33351f;
+    --text: #eae7d9; --muted: #8b8a72;
+    --amber: #e8a33d; --green: #7fbf5f; --red: #d9634b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+  header { padding: 32px 24px 12px; text-align: center; }
+  header h1 { font-family: 'IBM Plex Mono', monospace; font-size: 22px; margin: 0 0 6px; }
+  header p { color: var(--muted); font-size: 13px; margin: 0; }
+  main { max-width: 640px; margin: 0 auto; padding: 24px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    padding: 16px 18px; margin-bottom: 14px;
+  }
+  .card-top { display: flex; justify-content: space-between; align-items: center; }
+  .name { font-weight: 600; }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 8px; }
+  .dot-success { background: var(--green); }
+  .dot-failed { background: var(--red); }
+  .dot-unknown { background: var(--muted); }
+  .meta { display: flex; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--muted); font-family: 'IBM Plex Mono', monospace; }
+  .uptime { font-weight: 600; }
+  .uptime-ok { color: var(--green); }
+  .uptime-warn { color: var(--amber); }
+  .uptime-err { color: var(--red); }
+  .empty { text-align: center; color: var(--muted); padding: 60px 20px; font-size: 14px; }
+  footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; }
+  footer a { color: var(--amber); text-decoration: none; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Status</h1>
+    <p>Live status of monitored services</p>
+  </header>
+  <main id="statusList">
+    <div class="empty">Loading…</div>
+  </main>
+  <footer>Powered by <a href="/">cron-manager</a></footer>
+
+  <script>
+    async function load() {
+      const el = document.getElementById('statusList');
+      try {
+        const res = await fetch('/api/public/status');
+        const items = await res.json();
+        if (!items.length) {
+          el.innerHTML = '<div class="empty">No services are currently published to this status page.</div>';
+          return;
+        }
+        el.innerHTML = items.map(item => {
+          const dotClass = item.lastStatus === 'success' ? 'dot-success'
+            : item.lastStatus === 'failed' ? 'dot-failed' : 'dot-unknown';
+          const uptimeClass = item.uptimePercent == null ? ''
+            : item.uptimePercent >= 99 ? 'uptime-ok'
+            : item.uptimePercent >= 90 ? 'uptime-warn' : 'uptime-err';
+          return `
+            <div class="card">
+              <div class="card-top">
+                <span class="name"><span class="dot ${dotClass}"></span>${escapeHtml(item.name)}</span>
+                <span class="uptime ${uptimeClass}">${item.uptimePercent != null ? item.uptimePercent + '% uptime' : 'no data'}</span>
+              </div>
+              <div class="meta">
+                ${item.avgResponseMs != null ? `<span>avg ${item.avgResponseMs}ms</span>` : ''}
+                ${item.lastCheckedAt ? `<span>checked ${new Date(item.lastCheckedAt).toLocaleString()}</span>` : ''}
+              </div>
+            </div>`;
+        }).join('');
+      } catch {
+        el.innerHTML = '<div class="empty">Unable to load status right now.</div>';
+      }
+    }
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+    load();
+    setInterval(load, 30000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "cron-manager",
+  "version": "1.0.0",
+  "description": "Self-hosted open source cron job manager with a web dashboard, REST API, execution history, and support for HTTP or shell command jobs.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "license": "MIT",
+  "keywords": ["cron", "scheduler", "job-manager", "self-hosted", "dashboard"],
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cron-parser": "^4.9.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^2.7.0",
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

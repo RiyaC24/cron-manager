@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>cron-manager</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">*&nbsp;*&nbsp;*&nbsp;*&nbsp;*</span>
+      <span class="brand-name">cron-manager</span>
+    </div>
+    <div class="topbar-actions">
+      <a href="/status" target="_blank" class="btn btn-ghost">View status page</a>
+      <button id="newJobBtn" class="btn btn-accent">+ New job</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Jobs</h2>
+        <span id="jobCount" class="muted"></span>
+      </div>
+      <div id="jobList" class="job-list"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Recent runs</h2>
+        <button id="refreshLogs" class="btn btn-ghost">Refresh</button>
+      </div>
+      <div id="logList" class="log-list"></div>
+    </section>
+  </main>
+
+  <div id="modalOverlay" class="modal-overlay hidden">
+    <form id="jobForm" class="modal">
+      <h2 id="modalTitle">New job</h2>
+      <input type="hidden" id="jobId" />
+
+      <label>Name
+        <input id="jobName" type="text" placeholder="Nightly report" required />
+      </label>
+
+      <label>Schedule <span class="hint">(cron expression)</span>
+        <input id="jobSchedule" type="text" placeholder="0 9 * * *" required />
+        <div class="cron-fields">
+          <span>min</span><span>hour</span><span>day</span><span>month</span><span>dow</span>
+        </div>
+        <div id="scheduleFeedback" class="feedback"></div>
+      </label>
+
+      <label>Type
+        <select id="jobType">
+          <option value="http">HTTP request (GET)</option>
+          <option value="shell">Shell command</option>
+        </select>
+      </label>
+
+      <label id="targetLabel">Target
+        <input id="jobTarget" type="text" placeholder="https://example.com/api/cron" required />
+      </label>
+
+      <div id="httpChecksRow" class="row">
+        <label>Expected status
+          <input id="jobExpectedStatus" type="number" value="200" min="100" max="599" />
+        </label>
+        <label>Keyword match <span class="hint">(optional)</span>
+          <input id="jobKeyword" type="text" placeholder="e.g. OK, success" />
+        </label>
+      </div>
+
+      <div class="row">
+        <label>Timeout (ms)
+          <input id="jobTimeout" type="number" value="30000" min="1000" />
+        </label>
+        <label>Retries
+          <input id="jobRetries" type="number" value="0" min="0" max="10" />
+        </label>
+      </div>
+
+      <label class="checkbox-row">
+        <input id="jobEnabled" type="checkbox" checked />
+        Enabled
+      </label>
+
+      <label class="checkbox-row">
+        <input id="jobPublic" type="checkbox" />
+        Show on public <a href="/status" target="_blank" style="color:var(--amber)">/status</a> page
+      </label>
+
+      <div class="modal-actions">
+        <button type="button" id="cancelBtn" class="btn btn-ghost">Cancel</button>
+        <button type="submit" class="btn btn-accent">Save job</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

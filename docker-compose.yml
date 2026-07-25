@@ -1,0 +1,14 @@
+services:
+  cron-manager:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - PORT=3000
+      - DB_PATH=/app/data/cron-manager.db
+      # - FAILURE_WEBHOOK_URLS=https://example.com/webhook
+      # - BASIC_AUTH_USER=admin
+      # - BASIC_AUTH_PASS=change-me
+    restart: unless-stopped

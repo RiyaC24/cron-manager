@@ -1,0 +1,13 @@
+[
+  {
+    "name": "My website uptime check",
+    "schedule": "*/5 * * * *",
+    "type": "http",
+    "target": "https://effulgent-kleicha-4c7698.netlify.app/",
+    "timeout_ms": 15000,
+    "retries": 1,
+    "enabled": true,
+    "expected_status": 200,
+    "public_status": true
+  }
+]
