@@ -25,8 +25,8 @@ web dashboard, with a full REST API underneath.
 ### Locally
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/cron-manager.git
-cd cron-manager
+git clone https://github.com/YOUR_USERNAME/cronify.git
+cd cronify
 npm install
 cp .env.example .env
 npm start
@@ -47,7 +47,7 @@ All configuration is via environment variables (see `.env.example`):
 | Variable               | Description                                      | Default                    |
 |-------------------------|--------------------------------------------------|-----------------------------|
 | `PORT`                  | Port to listen on                                | `3000`                      |
-| `DB_PATH`               | Path to the SQLite database file                 | `./data/cron-manager.db`    |
+| `DB_PATH`               | Path to the SQLite database file                 | `./data/cronify.db`    |
 | `FAILURE_WEBHOOK_URLS`  | Comma-separated webhook URL(s) for job failures  | *(none)*                    |
 | `BASIC_AUTH_USER`       | Username to protect the dashboard/API            | *(disabled)*                |
 | `BASIC_AUTH_PASS`       | Password to protect the dashboard/API            | *(disabled)*                |
