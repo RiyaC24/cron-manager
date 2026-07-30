@@ -1,4 +1,4 @@
-# cronify
+# Cronify
 
 A self-hosted, open-source cron job manager. Create, schedule, run, and monitor
 recurring jobs — either HTTP requests or shell commands — from a lightweight
